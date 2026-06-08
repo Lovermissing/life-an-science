@@ -32,40 +32,37 @@
     <!-- AI Chat Bubble -->
     <div class="chat-bubble" id="aiBubble">
         <div class="bubble-content">
-            <p id="aiMessage">Welcome to the Life Science Laboratory. Let me show you the beauty of life sciences!</p>
+            <p id="aiMessage">Welcome to the Life Science Laboratory! I'm Dr. Qian Xuesen, and I'm excited to show you the wonders of life sciences. Let's explore together!</p>
         </div>
         <div class="bubble-arrow"></div>
     </div>
     
-    <!-- Flask Button -->
+    <!-- Flask Button (UPDATED: Using 4.jpg) -->
     <div class="flask-button" id="flaskBtn">
-        <div class="flask"></div>
-        <div class="liquid"></div>
-        <div class="bubbles">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
+        <img src="images/4.jpg" alt="Laboratory Flask" class="flask-image">
+        <div class="flask-glow"></div>
     </div>
     
-    <!-- Experiments Panel (hidden by default) -->
-    <div class="experiments-panel" id="experimentsPanel">
-        <h3>Choose an Experiment to Explore</h3>
-        <div class="experiments-grid">
-            <div class="experiment-btn" data-exp="leeuwenhoek">
-                <img src="images/1.jpg" alt="Microscope">
-                <span>Leeuwenhoek's Microorganisms</span>
+    <!-- Experiments Panel (hidden by default) - NOW CENTERED -->
+    <div class="experiments-panel-overlay" id="experimentsPanel">
+        <div class="experiments-panel-container">
+            <h3>Choose an Experiment to Explore</h3>
+            <div class="experiments-grid">
+                <div class="experiment-btn" data-exp="leeuwenhoek">
+                    <img src="images/1.jpg" alt="Microscope">
+                    <span>Leeuwenhoek's Microorganisms</span>
+                </div>
+                <div class="experiment-btn" data-exp="mendel">
+                    <img src="images/2.jpg" alt="Pea Plant">
+                    <span>Mendel's Pea Experiments</span>
+                </div>
+                <div class="experiment-btn" data-exp="watson-crick">
+                    <img src="images/3.jpg" alt="DNA">
+                    <span>DNA Double Helix</span>
+                </div>
             </div>
-            <div class="experiment-btn" data-exp="mendel">
-                <img src="images/2.jpg" alt="Pea Plant">
-                <span>Mendel's Pea Experiments</span>
-            </div>
-            <div class="experiment-btn" data-exp="watson-crick">
-                <img src="images/3.jpg" alt="DNA">
-                <span>DNA Double Helix</span>
-            </div>
+            <button class="back-btn" id="backToMain">Back to Laboratory</button>
         </div>
-        <button class="back-btn" id="backToMain">Back to Laboratory</button>
     </div>
     
     <!-- Experiment Detail Panel (FIXED CENTER POSITION) -->
