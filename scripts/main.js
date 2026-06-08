@@ -1,4 +1,4 @@
-// main.js - Main logic controller
+// scripts/main.js - Complete final version
 document.addEventListener('DOMContentLoaded', () => {
     // Element references
     const flaskBtn = document.getElementById('flaskBtn');
@@ -45,80 +45,106 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     
-    // Initialize
-    init();
+    // ==================== INITIALIZATION ====================
     
-    // Initialize function
+    // Initialize the application
     function init() {
+        console.log('Initializing Life Science Laboratory...');
+        
         // Show welcome message
         setTimeout(() => {
             showWelcomeMessage();
-        }, 1000);
+        }, 500);
         
         // Set up event listeners
-        setupEventListeners();
+        setTimeout(() => {
+            setupEventListeners();
+        }, 1000);
         
         // Initialize AI chat
-        initAIChat();
-    }
-    
-    // Set up event listeners
-    function setupEventListeners() {
-        // Flask button click event
-        flaskBtn.addEventListener('click', () => {
-            if (currentState === 'main') {
-                showExperimentsPanel();
-            }
-        });
+        setTimeout(() => {
+            initAIChat();
+        }, 1500);
         
-        // Back to main interface
-        backToMain.addEventListener('click', () => {
-            showMainInterface();
-        });
-        
-        // Close experiment detail
-        closeDetail.addEventListener('click', () => {
-            closeExperimentDetail();
-        });
-        
-        // Experiment buttons click
-        document.querySelectorAll('.experiment-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const experiment = btn.dataset.exp;
-                showExperimentDetail(experiment);
-            });
-        });
-        
-        // Next lab button
-        nextLabBtn.addEventListener('click', () => {
-            // Fill in the URL for the next lab
-            // window.location.href = 'https://example.com/next-lab';
-            alert('Next lab URL to be configured');
-        });
-        
-        // Chat send button
-        sendBtn.addEventListener('click', sendMessage);
-        
-        // Enter key to send message
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-        
-        // Hide loading overlay when page is loaded
-        window.addEventListener('load', () => {
-            setTimeout(() => {
+        // Hide loading overlay
+        setTimeout(() => {
+            if (loadingOverlay) {
                 loadingOverlay.style.opacity = '0';
                 setTimeout(() => {
                     loadingOverlay.style.display = 'none';
                 }, 500);
-            }, 1500);
+            }
+        }, 2000);
+    }
+    
+    // Set up all event listeners
+    function setupEventListeners() {
+        console.log('Setting up event listeners...');
+        
+        // Flask button click
+        if (flaskBtn) {
+            flaskBtn.addEventListener('click', () => {
+                console.log('Flask button clicked, current state:', currentState);
+                if (currentState === 'main') {
+                    showExperimentsPanel();
+                }
+            });
+        }
+        
+        // Back to main button
+        if (backToMain) {
+            backToMain.addEventListener('click', () => {
+                showMainInterface();
+            });
+        }
+        
+        // Close detail button
+        if (closeDetail) {
+            closeDetail.addEventListener('click', () => {
+                closeExperimentDetail();
+            });
+        }
+        
+        // Global click handler for experiment buttons
+        document.addEventListener('click', function(event) {
+            const experimentBtn = event.target.closest('.experiment-btn');
+            if (experimentBtn && currentState === 'experiments') {
+                const experiment = experimentBtn.dataset.exp;
+                console.log('Experiment button clicked:', experiment);
+                if (experiment) {
+                    showExperimentDetail(experiment);
+                }
+            }
         });
+        
+        // Next lab button
+        if (nextLabBtn) {
+            nextLabBtn.addEventListener('click', () => {
+                alert('Next laboratory coming soon!');
+            });
+        }
+        
+        // Chat send button
+        if (sendBtn) {
+            sendBtn.addEventListener('click', sendMessage);
+        }
+        
+        // Enter key to send message
+        if (userInput) {
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        }
+        
+        console.log('Event listeners set up successfully');
     }
     
     // Initialize AI chat
     function initAIChat() {
+        console.log('Initializing AI chat...');
+        
         aiChat = {
             currentExperiment: null,
             chatHistory: [],
@@ -126,9 +152,12 @@ document.addEventListener('DOMContentLoaded', () => {
             setExperiment: function(experiment) {
                 this.currentExperiment = experiment;
                 this.chatHistory = [];
+                console.log('AI chat set to experiment:', experiment);
             },
             
             addMessage: function(content, sender) {
+                if (!chatMessages) return;
+                
                 const messageDiv = document.createElement('div');
                 messageDiv.className = `message ${sender}`;
                 messageDiv.innerHTML = `<p>${this.escapeHtml(content)}</p>`;
@@ -142,10 +171,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 messageDiv.appendChild(timeDiv);
                 
-                if (chatMessages) {
-                    chatMessages.appendChild(messageDiv);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
             },
             
             sendMessage: async function(message) {
@@ -203,6 +230,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return div.innerHTML;
             }
         };
+        
+        console.log('AI chat initialized successfully');
     }
     
     // Send message
@@ -217,7 +246,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (aiChat && currentExperiment) {
             aiChat.sendMessage(message);
         } else {
-            // If not in experiment detail, show prompt
             if (chatMessages) {
                 const tempMsg = document.createElement('div');
                 tempMsg.className = 'message ai';
@@ -228,37 +256,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // ==================== WELCOME MESSAGE ====================
+    
     // Show welcome message
-    async function showWelcomeMessage() {
-        try {
-            // Try to get AI-generated welcome message
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    type: 'welcome'
-                })
-            });
-            
-            if (response.ok) {
-                const data = await response.json();
-                if (data.success) {
-                    aiMessage.textContent = data.content;
-                } else {
-                    aiMessage.textContent = "Welcome to the Life Science Laboratory! I'm Dr. Qian Xuesen, and I'm excited to show you the wonders of life sciences. Let's explore together!";
-                }
-            } else {
-                throw new Error('Failed to fetch welcome message');
-            }
-        } catch (error) {
-            console.error('Error loading welcome message:', error);
-            // Fallback welcome message
-            aiMessage.textContent = "Welcome to the Life Science Laboratory! I'm Dr. Qian Xuesen, and I'm excited to show you the wonders of life sciences. Let's explore together!";
+    function showWelcomeMessage() {
+        console.log('Showing welcome message...');
+        
+        if (aiMessage) {
+            aiMessage.textContent = "Welcome! I'm Dr. Qian Xuesen. Click the flask to explore life science experiments!";
         }
         
-        // Add subtle animation
+        // Add animation
         setTimeout(() => {
             if (aiBubble) {
                 aiBubble.style.animation = 'none';
@@ -268,43 +276,61 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 500);
         
-        // Hide loading overlay
-        if (loadingOverlay) {
-            loadingOverlay.style.opacity = '0';
-            setTimeout(() => {
-                loadingOverlay.style.display = 'none';
-            }, 500);
-        }
+        // Show flask button
+        setTimeout(() => {
+            if (flaskBtn) {
+                flaskBtn.style.opacity = '0';
+                flaskBtn.style.display = 'block';
+                setTimeout(() => {
+                    flaskBtn.style.transition = 'opacity 1s ease';
+                    flaskBtn.style.opacity = '1';
+                }, 100);
+            }
+        }, 1000);
+        
+        console.log('Welcome message displayed');
     }
     
-    // Show experiments panel (CENTERED)
+    // ==================== EXPERIMENTS PANEL ====================
+    
+    // Show experiments panel (CENTRAL)
     function showExperimentsPanel() {
+        console.log('Showing experiments panel...');
         currentState = 'experiments';
+        
         if (experimentsPanel) {
             experimentsPanel.style.display = 'flex';
             
-            // Animation effect
-            experimentsPanel.style.opacity = '0';
+            // Ensure buttons are clickable
+            const experimentBtns = experimentsPanel.querySelectorAll('.experiment-btn');
+            experimentBtns.forEach(btn => {
+                btn.style.pointerEvents = 'auto';
+                btn.style.cursor = 'pointer';
+            });
+            
+            // Animation
             setTimeout(() => {
                 experimentsPanel.style.transition = 'all 0.5s ease';
                 experimentsPanel.style.opacity = '1';
             }, 10);
         }
         
-        // AI prompt
+        // Update AI message
         setTimeout(() => {
             if (aiMessage) {
-                aiMessage.textContent = "Please choose one of the three life science experiments below. Each represents a milestone discovery!";
+                aiMessage.textContent = "Choose an experiment to explore!";
             }
-        }, 500);
+        }, 300);
+        
+        console.log('Experiments panel displayed');
     }
     
     // Show main interface
     function showMainInterface() {
+        console.log('Returning to main interface...');
         currentState = 'main';
         
         if (experimentsPanel) {
-            // Animation effect
             experimentsPanel.style.transition = 'all 0.5s ease';
             experimentsPanel.style.opacity = '0';
             
@@ -314,16 +340,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 500);
         }
         
-        // AI back to welcome state
+        // Show flask button
+        if (flaskBtn) {
+            flaskBtn.style.display = 'block';
+        }
+        
+        // Update AI message
         setTimeout(() => {
             if (aiMessage) {
                 aiMessage.textContent = "Welcome back! Click the flask to explore more experiments.";
             }
         }, 300);
+        
+        console.log('Main interface displayed');
     }
+    
+    // ==================== EXPERIMENT DETAIL ====================
     
     // Show experiment detail
     function showExperimentDetail(experiment) {
+        console.log('Showing experiment detail:', experiment);
         currentState = 'detail';
         currentExperiment = experiment;
         
@@ -342,8 +378,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${expData.icon} ${expData.title} 
                 <span class="year">(${expData.year})</span>
             `;
-            
-            // Update theme color
             updateExperimentTheme(expData.color);
         } else if (expTitle) {
             expTitle.textContent = 'Life Science Experiment';
@@ -368,6 +402,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 aiChat.addMessage(`Welcome to the ${experimentTitles[experiment].title}! What would you like to know?`, 'ai');
             }
         }, 1000);
+        
+        console.log('Experiment detail displayed');
     }
     
     // Update experiment theme color
@@ -408,10 +444,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Close experiment detail
     function closeExperimentDetail() {
+        console.log('Closing experiment detail...');
         currentState = 'experiments';
         
         if (experimentDetail) {
-            // Animation effect
             experimentDetail.style.transition = 'all 0.5s ease';
             experimentDetail.style.opacity = '0';
             experimentDetail.style.transform = 'translateY(20px)';
@@ -445,12 +481,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Reset experiment state
         currentExperiment = null;
         
-        // AI prompt
+        // Update AI message
         setTimeout(() => {
             if (aiMessage) {
                 aiMessage.textContent = "Which experiment would you like to explore next?";
             }
         }, 300);
+        
+        console.log('Experiment detail closed');
     }
     
     // Reset theme color
@@ -470,6 +508,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load experiment introduction
     async function loadExperimentIntroduction(experiment) {
         if (!expContent) return;
+        
+        console.log('Loading experiment introduction:', experiment);
         
         expContent.innerHTML = `
             <div class="experiment-loading">
@@ -535,6 +575,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             
+            console.log('Experiment introduction loaded successfully');
+            
         } catch (error) {
             console.error('Error loading introduction:', error);
             
@@ -561,7 +603,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function formatAIResponse(text) {
         if (!text) return '';
         
-        // Convert Markdown-style line breaks to HTML paragraphs
         const paragraphs = text.split('\n\n');
         return paragraphs.map(p => {
             if (p.trim()) {
@@ -571,25 +612,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
     }
     
-    // Export function for microscope interaction
-    window.adjustMicroscope = function(value) {
-        const magLevel = document.getElementById('magLevel');
-        const waterSample = document.getElementById('waterSample');
-        
-        if (magLevel) {
-            magLevel.textContent = `${value}x`;
-        }
-        
-        if (waterSample) {
-            if (value >= 200) {
-                waterSample.innerHTML = '🦠 Microorganisms visible!';
-                waterSample.style.color = '#4CAF50';
-            } else {
-                waterSample.innerHTML = '💧 Water Sample';
-                waterSample.style.color = '#2196F3';
-            }
-        }
-    };
+    // ==================== START APPLICATION ====================
+    
+    // Start the application
+    init();
     
     // Debug info
     console.log('Life Science Laboratory initialized successfully');
