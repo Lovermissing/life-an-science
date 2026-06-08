@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USTC Life Science Laboratory</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <style>
+        /* 内联基础样式，外部CSS加载时的备用 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cambria', 'Georgia', serif;
+            overflow: hidden;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景图 -->
+    <div class="background" style="background-image: url('images/sk1.jpg');"></div>
+    
+    <!-- 青年钱学森人物 -->
+    <div class="character-container">
+        <img src="images/1.png" alt="Young Qian Xuesen" class="young-qian" id="qianCharacter">
+    </div>
+    
+    <!-- AI对话气泡 -->
+    <div class="chat-bubble" id="aiBubble">
+        <div class="bubble-content">
+            <p id="aiMessage">Welcome to the Life Science Laboratory. Let me show you the beauty of life sciences!</p>
+        </div>
+        <div class="bubble-arrow"></div>
+    </div>
+    
+    <!-- 锥形瓶按钮 -->
+    <div class="flask-button" id="flaskBtn">
+        <div class="flask"></div>
+        <div class="liquid"></div>
+        <div class="bubbles">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    
+    <!-- 实验选择面板（默认隐藏） -->
+    <div class="experiments-panel" id="experimentsPanel">
+        <h3>Choose an Experiment to Explore</h3>
+        <div class="experiments-grid">
+            <div class="experiment-btn" data-exp="leeuwenhoek">
+                <img src="images/1.jpg" alt="Microscope">
+                <span>Leeuwenhoek's Microorganisms</span>
+            </div>
+            <div class="experiment-btn" data-exp="mendel">
+                <img src="images/2.jpg" alt="Pea Plant">
+                <span>Mendel's Pea Experiments</span>
+            </div>
+            <div class="experiment-btn" data-exp="watson-crick">
+                <img src="images/3.jpg" alt="DNA">
+                <span>DNA Double Helix</span>
+            </div>
+        </div>
+        <button class="back-btn" id="backToMain">Back to Laboratory</button>
+    </div>
+    
+    <!-- 实验介绍面板 -->
+    <div class="experiment-detail" id="experimentDetail">
+        <div class="detail-header">
+            <h2 id="expTitle"></h2>
+            <button class="close-btn" id="closeDetail">✕</button>
+        </div>
+        <div class="detail-content" id="expContent">
+            <!-- AI介绍内容会动态加载 -->
+        </div>
+        <div class="chat-interface" id="chatInterface">
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Ask Dr. Qian about this experiment...">
+                <button id="sendBtn">Send</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 右下角箭头按钮 -->
+    <div class="next-lab-btn" id="nextLabBtn">
+        <span>Next Lab →</span>
+    </div>
+    
+    <!-- 加载动画 -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader">
+            <div class="petri-dish">
+                <div class="bacteria"></div>
+                <div class="bacteria"></div>
+                <div class="bacteria"></div>
+            </div>
+            <p>Connecting to Dr. Qian Xuesen...</p>
+        </div>
+    </div>
+    
+    <script src="scripts/main.js"></script>
+    <script src="scripts/ai-chat.js"></script>
+    <script src="scripts/experiments.js"></script>
+</body>
+</html>
