@@ -1,9 +1,9 @@
 {
   "name": "ustc-lab-life-science",
   "version": "1.0.0",
-  "type": "module",  // 添加这行
+  "type": "module",  
   "engines": {
-    "node": "20.x"   // 改为固定版本
+    "node": "20.x"   
   },
   "dependencies": {
     "openai": "^4.77.0"
