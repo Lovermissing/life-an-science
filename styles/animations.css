@@ -1,0 +1,37 @@
+/* 浮动动画 */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+/* 气泡出现 */
+@keyframes bubbleAppear {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 液体波动 */
+@keyframes liquidWave {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-10px) scale(1.05); }
+}
+
+/* 气泡上升 */
+@keyframes bubbleRise {
+    0% { transform: translateY(100px); opacity: 1; }
+    100% { transform: translateY(-100px); opacity: 0; }
+}
+
+/* 旋转动画 */
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 细菌移动 */
+@keyframes moveBacteria {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(20px, 10px); }
+    50% { transform: translate(10px, 20px); }
+    75% { transform: translate(-10px, 15px); }
+}
