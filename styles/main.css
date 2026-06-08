@@ -179,203 +179,212 @@ body {
     border-right: 22px solid rgba(255, 255, 255, 0.97);
 }
 
-/* ==================== FLASK BUTTON ==================== */
+/* ==================== FLASK BUTTON (UPDATED: Using images/4.jpg) ==================== */
 .flask-button {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 140px;
-    height: 230px;
+    width: 180px;
+    height: 180px;
     cursor: pointer;
     z-index: 15;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.4));
+    border-radius: 50%;
+    overflow: visible;
 }
 
 .flask-button:hover {
-    transform: translate(-50%, -50%) scale(1.15) rotate(2deg);
-    filter: drop-shadow(0 15px 35px rgba(76, 175, 80, 0.3)) brightness(1.1);
+    transform: translate(-50%, -50%) scale(1.15) rotate(5deg);
+    filter: drop-shadow(0 15px 35px rgba(76, 175, 80, 0.5)) brightness(1.1);
 }
 
-.flask-button:hover .flask {
-    box-shadow: 
-        0 0 30px rgba(76, 175, 80, 0.5),
-        0 0 60px rgba(33, 150, 243, 0.3),
-        inset 0 2px 20px rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.8);
-}
-
-.flask {
-    position: absolute;
+.flask-image {
     width: 100%;
     height: 100%;
-    background: linear-gradient(145deg, 
-        rgba(255, 255, 255, 0.25), 
-        rgba(255, 255, 255, 0.15)
-    );
-    border-radius: 45% 45% 15% 15%;
+    object-fit: cover;
+    border-radius: 50%;
     border: 4px solid rgba(255, 255, 255, 0.6);
     box-shadow: 
-        0 10px 30px rgba(0, 0, 0, 0.3),
-        inset 0 2px 15px rgba(255, 255, 255, 0.2);
-    overflow: hidden;
+        0 10px 30px rgba(0, 0, 0, 0.4),
+        0 0 0 2px rgba(76, 175, 80, 0.3),
+        inset 0 2px 15px rgba(255, 255, 255, 0.3);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(5px);
+    animation: flaskFloat 6s ease-in-out infinite;
 }
 
-.liquid {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 65%;
-    background: linear-gradient(to top, 
-        rgba(76, 175, 80, 0.9) 0%, 
-        rgba(76, 175, 80, 0.8) 20%,
-        rgba(33, 150, 243, 0.85) 50%,
-        rgba(33, 150, 243, 0.7) 100%
-    );
-    border-radius: 0 0 15% 15%;
-    animation: liquidWave 8s ease-in-out infinite;
+@keyframes flaskFloat {
+    0%, 100% { 
+        transform: translateY(0) rotate(0deg); 
+    }
+    25% { 
+        transform: translateY(-10px) rotate(2deg); 
+    }
+    50% { 
+        transform: translateY(0) rotate(0deg); 
+    }
+    75% { 
+        transform: translateY(-7px) rotate(-2deg); 
+    }
+}
+
+.flask-button:hover .flask-image {
+    border-color: rgba(76, 175, 80, 0.8);
     box-shadow: 
-        inset 0 5px 20px rgba(255, 255, 255, 0.3),
-        0 0 20px rgba(76, 175, 80, 0.4);
-    transition: all 0.5s ease;
+        0 15px 40px rgba(76, 175, 80, 0.6),
+        0 0 0 3px rgba(76, 175, 80, 0.4),
+        inset 0 2px 20px rgba(255, 255, 255, 0.4);
+    animation: flaskFloat 4s ease-in-out infinite;
 }
 
-.flask-button:hover .liquid {
-    animation: liquidWave 5s ease-in-out infinite;
-    background: linear-gradient(to top, 
-        rgba(76, 175, 80, 1) 0%, 
-        rgba(76, 175, 80, 0.9) 20%,
-        rgba(33, 150, 243, 0.95) 50%,
-        rgba(33, 150, 243, 0.8) 100%
-    );
-}
-
-.bubbles {
+.flask-glow {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-}
-
-.bubbles span {
-    position: absolute;
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.9), 
-        rgba(255, 255, 255, 0.7)
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(
+        circle at center,
+        rgba(76, 175, 80, 0.3) 0%,
+        rgba(33, 150, 243, 0.2) 40%,
+        transparent 70%
     );
     border-radius: 50%;
-    animation: bubbleRise 4s ease-in-out infinite;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    filter: blur(0.5px);
+    z-index: -1;
+    animation: glowPulse 3s ease-in-out infinite;
+    opacity: 0.8;
 }
 
-.bubbles span:nth-child(1) {
-    width: 12px;
-    height: 12px;
-    left: 15%;
-    animation-delay: 0s;
-    animation-duration: 5s;
+@keyframes glowPulse {
+    0%, 100% { 
+        opacity: 0.6; 
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% { 
+        opacity: 0.9; 
+        transform: translate(-50%, -50%) scale(1.1);
+    }
 }
 
-.bubbles span:nth-child(2) {
-    width: 9px;
-    height: 9px;
-    left: 50%;
-    animation-delay: 1.2s;
-    animation-duration: 4.5s;
-}
-
-.bubbles span:nth-child(3) {
-    width: 14px;
-    height: 14px;
-    left: 75%;
-    animation-delay: 2.5s;
-    animation-duration: 6s;
-}
-
-/* Additional bubbles for more effect */
-.bubbles span:nth-child(4) {
-    width: 7px;
-    height: 7px;
-    left: 30%;
-    animation-delay: 0.8s;
-    animation-duration: 5.5s;
-}
-
-.bubbles span:nth-child(5) {
-    width: 10px;
-    height: 10px;
-    left: 65%;
-    animation-delay: 3.2s;
-    animation-duration: 4.8s;
-}
-
-/* ==================== EXPERIMENTS PANEL ==================== */
-.experiments-panel {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: linear-gradient(145deg, 
-        rgba(0, 0, 0, 0.9), 
-        rgba(0, 0, 0, 0.85)
+.flask-button:hover .flask-glow {
+    animation: glowPulse 2s ease-in-out infinite;
+    background: radial-gradient(
+        circle at center,
+        rgba(76, 175, 80, 0.5) 0%,
+        rgba(33, 150, 243, 0.3) 40%,
+        transparent 70%
     );
-    backdrop-filter: blur(15px) saturate(180%);
-    padding: 50px 40px;
-    border-radius: 25px;
-    border: 3px solid rgba(76, 175, 80, 0.5);
-    width: 85%;
-    max-width: 1000px;
+}
+
+/* ==================== EXPERIMENTS PANEL (CENTERED) ==================== */
+/* Updated: Now using overlay for center positioning */
+.experiments-panel-overlay {
+    position: fixed;
+    inset: 0;
     display: none;
-    z-index: 30;
+    justify-content: center;
+    align-items: center;
+    z-index: 40;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    animation: fadeInOverlay 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    padding: 20px;
+}
+
+.experiments-panel-container {
+    background: linear-gradient(145deg, 
+        rgba(0, 0, 0, 0.92), 
+        rgba(0, 0, 0, 0.88)
+    );
+    backdrop-filter: blur(20px) saturate(180%);
+    padding: 50px 60px;
+    border-radius: 25px;
+    border: 3px solid rgba(76, 175, 80, 0.6);
+    width: 90%;
+    max-width: 1100px;
     box-shadow: 
-        0 25px 60px rgba(0, 0, 0, 0.6),
-        0 0 0 1px rgba(255, 255, 255, 0.1),
+        0 30px 70px rgba(0, 0, 0, 0.7),
+        0 0 0 2px rgba(255, 255, 255, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    animation: slideUpCenter 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    transform: translateY(30px) scale(0.95);
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.9);
-    transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
 
-.experiments-panel.active {
-    display: block;
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+.experiments-panel-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, 
+        #4CAF50 0%, 
+        #2196F3 33%, 
+        #9C27B0 66%, 
+        #FF9800 100%
+    );
+    border-radius: 25px 25px 0 0;
+    z-index: 1;
 }
 
-.experiments-panel h3 {
+.experiments-panel-container h3 {
     text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 40px;
+    font-size: 2.8rem;
+    margin-bottom: 50px;
     color: #4CAF50;
     font-weight: 700;
-    text-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
+    text-shadow: 0 2px 15px rgba(76, 175, 80, 0.3);
     letter-spacing: 1px;
     background: linear-gradient(135deg, #4CAF50, #2E7D32);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    padding-bottom: 15px;
-    border-bottom: 2px solid rgba(76, 175, 80, 0.3);
+    padding-bottom: 20px;
+    border-bottom: 3px solid rgba(76, 175, 80, 0.3);
+    position: relative;
+    z-index: 2;
+}
+
+.experiments-panel-container h3::after {
+    content: 'Select one to begin your journey';
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 10px;
+    font-style: italic;
+    letter-spacing: 0.5px;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.8), 
+        rgba(255, 255, 255, 0.6)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .experiments-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 35px;
-    margin-bottom: 40px;
+    gap: 40px;
+    margin-bottom: 50px;
+    position: relative;
+    z-index: 2;
 }
 
 .experiment-btn {
     background: linear-gradient(145deg, 
-        rgba(255, 255, 255, 0.12), 
-        rgba(255, 255, 255, 0.08)
+        rgba(255, 255, 255, 0.15), 
+        rgba(255, 255, 255, 0.1)
     );
     border-radius: 20px;
-    padding: 25px;
+    padding: 30px 25px;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     text-align: center;
@@ -383,6 +392,12 @@ body {
     position: relative;
     overflow: hidden;
     backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 300px;
 }
 
 .experiment-btn::before {
@@ -394,36 +409,37 @@ body {
     height: 4px;
     background: linear-gradient(90deg, 
         rgba(76, 175, 80, 0) 0%, 
-        rgba(76, 175, 80, 0.8) 50%, 
+        rgba(76, 175, 80, 0.9) 50%, 
         rgba(76, 175, 80, 0) 100%
     );
     transition: all 0.4s ease;
+    z-index: 1;
 }
 
 .experiment-btn:hover {
     background: linear-gradient(145deg, 
-        rgba(76, 175, 80, 0.25), 
-        rgba(76, 175, 80, 0.15)
+        rgba(76, 175, 80, 0.3), 
+        rgba(76, 175, 80, 0.2)
     );
-    border-color: rgba(76, 175, 80, 0.6);
-    transform: translateY(-8px) scale(1.05);
+    border-color: rgba(76, 175, 80, 0.8);
+    transform: translateY(-10px) scale(1.08);
     box-shadow: 
-        0 15px 40px rgba(76, 175, 80, 0.4),
-        0 0 30px rgba(76, 175, 80, 0.2);
+        0 20px 50px rgba(76, 175, 80, 0.5),
+        0 0 40px rgba(76, 175, 80, 0.3);
 }
 
 .experiment-btn:hover::before {
     height: 100%;
     background: linear-gradient(135deg, 
-        rgba(76, 175, 80, 0.2), 
-        rgba(76, 175, 80, 0.1)
+        rgba(76, 175, 80, 0.3), 
+        rgba(76, 175, 80, 0.2)
     );
     transition: height 0.4s ease;
 }
 
 .experiment-btn:hover img {
-    transform: scale(1.08) rotate(2deg);
-    filter: brightness(1.2) saturate(1.3);
+    transform: scale(1.1) rotate(3deg);
+    filter: brightness(1.2) saturate(1.3) drop-shadow(0 0 10px rgba(76, 175, 80, 0.5));
 }
 
 .experiment-btn img {
@@ -431,45 +447,63 @@ body {
     height: 180px;
     object-fit: cover;
     border-radius: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 3px solid rgba(255, 255, 255, 0.15);
+    position: relative;
+    z-index: 2;
 }
 
 .experiment-btn span {
     display: block;
-    font-size: 1.3rem;
-    font-weight: 600;
+    font-size: 1.4rem;
+    font-weight: 700;
     color: white;
     line-height: 1.4;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     transition: all 0.3s ease;
-    padding: 0 5px;
+    padding: 0 10px;
+    position: relative;
+    z-index: 2;
+    letter-spacing: 0.5px;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.9), 
+        rgba(255, 255, 255, 0.7)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .experiment-btn:hover span {
-    color: #4CAF50;
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     transform: translateY(-2px);
+    text-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
 }
 
 .back-btn {
     display: block;
     margin: 0 auto;
-    padding: 15px 40px;
+    padding: 18px 50px;
     background: linear-gradient(135deg, #2196F3, #1976D2);
     color: white;
     border: none;
     border-radius: 30px;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4);
+    box-shadow: 0 10px 30px rgba(33, 150, 243, 0.5);
     position: relative;
     overflow: hidden;
     letter-spacing: 0.5px;
-    min-width: 200px;
+    min-width: 250px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    z-index: 2;
 }
 
 .back-btn::before {
@@ -481,7 +515,7 @@ body {
     height: 100%;
     background: linear-gradient(90deg, 
         transparent, 
-        rgba(255, 255, 255, 0.2), 
+        rgba(255, 255, 255, 0.3), 
         transparent
     );
     transition: all 0.6s ease;
@@ -489,8 +523,9 @@ body {
 
 .back-btn:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 35px rgba(33, 150, 243, 0.6);
+    box-shadow: 0 15px 40px rgba(33, 150, 243, 0.7);
     background: linear-gradient(135deg, #1976D2, #0D47A1);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .back-btn:hover::before {
@@ -499,11 +534,11 @@ body {
 
 .back-btn:active {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.5);
+    box-shadow: 0 8px 25px rgba(33, 150, 243, 0.6);
 }
 
 /* ==================== EXPERIMENT DETAIL (CENTER FIX) ==================== */
-/* 🔥 COMPLETE CENTER POSITIONING SYSTEM */
+/* COMPLETE CENTER POSITIONING SYSTEM */
 .experiment-detail-overlay {
     position: fixed;
     inset: 0;
@@ -1322,6 +1357,32 @@ body {
     }
 }
 
+@keyframes flaskFloat {
+    0%, 100% { 
+        transform: translateY(0) rotate(0deg); 
+    }
+    25% { 
+        transform: translateY(-10px) rotate(2deg); 
+    }
+    50% { 
+        transform: translateY(0) rotate(0deg); 
+    }
+    75% { 
+        transform: translateY(-7px) rotate(-2deg); 
+    }
+}
+
+@keyframes glowPulse {
+    0%, 100% { 
+        opacity: 0.6; 
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% { 
+        opacity: 0.9; 
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
 /* ==================== RESPONSIVE DESIGN ==================== */
 @media (max-width: 1200px) {
     .experiment-detail-container {
@@ -1329,15 +1390,15 @@ body {
         max-width: 1200px;
     }
     
-    .experiments-panel {
-        width: 90%;
-        padding: 40px 30px;
+    .experiments-panel-container {
+        padding: 40px 50px;
     }
 }
 
 @media (max-width: 992px) {
     .experiments-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
     }
     
     .character-container {
@@ -1447,24 +1508,31 @@ body {
         top: 10%;
     }
     
-    .experiments-panel {
-        padding: 30px 20px;
+    .experiments-panel-overlay {
+        padding: 10px;
     }
     
-    .experiments-panel h3 {
-        font-size: 2rem;
+    .experiments-panel-container {
+        width: 100%;
+        border-radius: 20px;
+        padding: 25px 15px;
+    }
+    
+    .experiments-panel-container h3 {
+        font-size: 1.8rem;
     }
     
     .experiment-btn {
+        min-height: 220px;
         padding: 20px 15px;
     }
     
     .experiment-btn img {
-        height: 150px;
+        height: 140px;
     }
     
     .experiment-btn span {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
     }
     
     .experiment-detail-overlay {
@@ -1514,6 +1582,12 @@ body {
     
     .loading-text h3 {
         font-size: 1.6rem;
+    }
+    
+    .back-btn {
+        padding: 15px 30px;
+        font-size: 1.2rem;
+        min-width: 200px;
     }
 }
 
