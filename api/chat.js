@@ -6,7 +6,7 @@ const openai = new OpenAI({
   apiKey: process.env.DEEPSEEK_API_KEY || ''
 });
 
-// 🔥 ADD THIS SECTION: English-only system prompt
+// UPDATED: Enhanced English-only system prompt with welcome message
 const BASE_SYSTEM_PROMPT = `You are the young Qian Xuesen, age 28, an enthusiastic Assistant Professor of Life Sciences at USTC.
 
 Your character:
@@ -28,7 +28,16 @@ Language Guidelines:
 
 Role: You're guiding students through USTC's Life Science Laboratory.`;
 
-// 🔥 ADD THIS SECTION: English experiment prompts
+// UPDATED: Enhanced welcome message
+const WELCOME_MESSAGE = `Welcome to the Life Science Laboratory! I'm Dr. Qian Xuesen, and I'm delighted to welcome you to our exploration of life's mysteries. 
+
+As a researcher at USTC, I've always been fascinated by how living systems work - from the tiniest microorganisms to the complexity of DNA. Each discovery opens new doors to understanding life itself.
+
+Today, I'll guide you through three groundbreaking experiments that changed biology forever. You can start by clicking the flask in the center, then choose an experiment that interests you. I'll be right here to answer any questions you have along the way!
+
+What aspect of life science intrigues you the most?`;
+
+// English experiment prompts
 const EXPERIMENT_INTRO_PROMPTS = {
   leeuwenhoek: `Introduce Antonie van Leeuwenhoek's discovery of microorganisms (1676).
 
@@ -101,7 +110,16 @@ export default async function handler(req, res) {
       { role: 'system', content: BASE_SYSTEM_PROMPT }
     ];
     
-    if (type === 'introduction' && EXPERIMENT_INTRO_PROMPTS[experiment]) {
+    if (type === 'welcome') {
+      // Return the pre-defined welcome message
+      res.status(200).json({
+        success: true,
+        content: WELCOME_MESSAGE,
+        tokens: 0
+      });
+      return;
+      
+    } else if (type === 'introduction' && EXPERIMENT_INTRO_PROMPTS[experiment]) {
       messages.push({
         role: 'user',
         content: `As Young Qian Xuesen, introduce the ${experiment} experiment to a curious student.\n\n${EXPERIMENT_INTRO_PROMPTS[experiment]}\n\nKeep your introduction to 3-4 paragraphs maximum. Use only English.`
@@ -154,7 +172,7 @@ export default async function handler(req, res) {
     
     res.status(200).json({
       success: false,
-      content: FALLBACK_RESPONSES[req.body?.experiment] || "Fascinating question! As a life scientist, I believe curiosity drives all discovery. What would you like to know more about?",
+      content: FALLBACK_RESPONSES[req.body?.experiment] || "Welcome! I'm Dr. Qian Xuesen, and I'm excited to explore the wonders of life science with you. What would you like to know more about?",
       error: error.message,
       fallback: true
     });
