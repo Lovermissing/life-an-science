@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/animations.css">
     <style>
-        /* 内联基础样式，外部CSS加载时的备用 */
         * {
             margin: 0;
             padding: 0;
@@ -22,15 +21,15 @@
     </style>
 </head>
 <body>
-    <!-- 背景图 -->
+    <!-- Background Image -->
     <div class="background" style="background-image: url('images/sk1.jpg');"></div>
     
-    <!-- 青年钱学森人物 -->
+    <!-- Young Qian Xuesen Character -->
     <div class="character-container">
         <img src="images/1.png" alt="Young Qian Xuesen" class="young-qian" id="qianCharacter">
     </div>
     
-    <!-- AI对话气泡 -->
+    <!-- AI Chat Bubble -->
     <div class="chat-bubble" id="aiBubble">
         <div class="bubble-content">
             <p id="aiMessage">Welcome to the Life Science Laboratory. Let me show you the beauty of life sciences!</p>
@@ -38,7 +37,7 @@
         <div class="bubble-arrow"></div>
     </div>
     
-    <!-- 锥形瓶按钮 -->
+    <!-- Flask Button -->
     <div class="flask-button" id="flaskBtn">
         <div class="flask"></div>
         <div class="liquid"></div>
@@ -49,7 +48,7 @@
         </div>
     </div>
     
-    <!-- 实验选择面板（默认隐藏） -->
+    <!-- Experiments Panel (hidden by default) -->
     <div class="experiments-panel" id="experimentsPanel">
         <h3>Choose an Experiment to Explore</h3>
         <div class="experiments-grid">
@@ -69,30 +68,32 @@
         <button class="back-btn" id="backToMain">Back to Laboratory</button>
     </div>
     
-    <!-- 实验介绍面板 -->
-    <div class="experiment-detail" id="experimentDetail">
-        <div class="detail-header">
-            <h2 id="expTitle"></h2>
-            <button class="close-btn" id="closeDetail">✕</button>
-        </div>
-        <div class="detail-content" id="expContent">
-            <!-- AI介绍内容会动态加载 -->
-        </div>
-        <div class="chat-interface" id="chatInterface">
-            <div class="chat-messages" id="chatMessages"></div>
-            <div class="chat-input">
-                <input type="text" id="userInput" placeholder="Ask Dr. Qian about this experiment...">
-                <button id="sendBtn">Send</button>
+    <!-- Experiment Detail Panel (FIXED CENTER POSITION) -->
+    <div class="experiment-detail-overlay" id="experimentDetail">
+        <div class="experiment-detail-container">
+            <div class="detail-header">
+                <h2 id="expTitle"></h2>
+                <button class="close-btn" id="closeDetail">✕</button>
+            </div>
+            <div class="detail-content" id="expContent">
+                <!-- AI content will load here -->
+            </div>
+            <div class="chat-interface">
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input">
+                    <input type="text" id="userInput" placeholder="Ask Dr. Qian about this experiment...">
+                    <button id="sendBtn">Send</button>
+                </div>
             </div>
         </div>
     </div>
     
-    <!-- 右下角箭头按钮 -->
+    <!-- Next Lab Button -->
     <div class="next-lab-btn" id="nextLabBtn">
         <span>Next Lab →</span>
     </div>
     
-    <!-- 加载动画 -->
+    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loader">
             <div class="petri-dish">
@@ -105,7 +106,5 @@
     </div>
     
     <script src="scripts/main.js"></script>
-    <script src="scripts/ai-chat.js"></script>
-    <script src="scripts/experiments.js"></script>
 </body>
 </html>
