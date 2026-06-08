@@ -1,6 +1,6 @@
-// main.js - 主逻辑控制器
+// main.js - Main logic controller
 document.addEventListener('DOMContentLoaded', () => {
-    // 元素引用
+    // Element references
     const flaskBtn = document.getElementById('flaskBtn');
     const experimentsPanel = document.getElementById('experimentsPanel');
     const experimentDetail = document.getElementById('experimentDetail');
@@ -13,20 +13,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const aiBubble = document.getElementById('aiBubble');
     const aiMessage = document.getElementById('aiMessage');
     
-    // 实验按钮
-    const experimentBtns = document.querySelectorAll('.experiment-btn');
-    
-    // 聊天界面元素
+    // Chat interface elements
     const chatMessages = document.getElementById('chatMessages');
     const userInput = document.getElementById('userInput');
     const sendBtn = document.getElementById('sendBtn');
     
-    // 当前状态
+    // Current state
     let currentState = 'main'; // main, experiments, detail
     let currentExperiment = null;
     let aiChat = null;
     
-    // 实验标题映射
+    // Experiment title mapping
     const experimentTitles = {
         'leeuwenhoek': {
             title: 'Leeuwenhoek Discovers Microorganisms',
@@ -48,68 +45,68 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     
-    // 初始化
+    // Initialize
     init();
     
-    // 初始化函数
+    // Initialize function
     function init() {
-        // 初始化AI欢迎语
+        // Show welcome message
         setTimeout(() => {
             showWelcomeMessage();
         }, 1000);
         
-        // 事件监听器
+        // Set up event listeners
         setupEventListeners();
         
-        // 初始化AI聊天
+        // Initialize AI chat
         initAIChat();
     }
     
-    // 设置事件监听器
+    // Set up event listeners
     function setupEventListeners() {
-        // 锥形瓶点击事件
+        // Flask button click event
         flaskBtn.addEventListener('click', () => {
             if (currentState === 'main') {
                 showExperimentsPanel();
             }
         });
         
-        // 返回主界面
+        // Back to main interface
         backToMain.addEventListener('click', () => {
             showMainInterface();
         });
         
-        // 关闭实验详情
+        // Close experiment detail
         closeDetail.addEventListener('click', () => {
             closeExperimentDetail();
         });
         
-        // 实验按钮点击
-        experimentBtns.forEach(btn => {
+        // Experiment buttons click
+        document.querySelectorAll('.experiment-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const experiment = btn.dataset.exp;
                 showExperimentDetail(experiment);
             });
         });
         
-        // 下一个实验室按钮
+        // Next lab button
         nextLabBtn.addEventListener('click', () => {
-            // 这里填入下一个实验室的URL
+            // Fill in the URL for the next lab
             // window.location.href = 'https://example.com/next-lab';
             alert('Next lab URL to be configured');
         });
         
-        // 聊天发送按钮
+        // Chat send button
         sendBtn.addEventListener('click', sendMessage);
         
-        // 回车键发送消息
+        // Enter key to send message
         userInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 sendMessage();
             }
         });
         
-        // 页面加载完成后隐藏加载动画
+        // Hide loading overlay when page is loaded
         window.addEventListener('load', () => {
             setTimeout(() => {
                 loadingOverlay.style.opacity = '0';
@@ -120,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // 初始化AI聊天
+    // Initialize AI chat
     function initAIChat() {
         aiChat = {
             currentExperiment: null,
@@ -136,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 messageDiv.className = `message ${sender}`;
                 messageDiv.innerHTML = `<p>${this.escapeHtml(content)}</p>`;
                 
-                // 添加时间戳
+                // Add timestamp
                 const timeDiv = document.createElement('div');
                 timeDiv.className = 'message-time';
                 timeDiv.textContent = new Date().toLocaleTimeString([], { 
@@ -145,13 +142,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 messageDiv.appendChild(timeDiv);
                 
-                chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+                if (chatMessages) {
+                    chatMessages.appendChild(messageDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
             },
             
             sendMessage: async function(message) {
                 this.addMessage(message, 'user');
-                sendBtn.disabled = true;
+                if (sendBtn) sendBtn.disabled = true;
                 
                 try {
                     const response = await this.callAI(message);
@@ -160,8 +159,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('AI Error:', error);
                     this.addMessage("I apologize, but I'm having trouble connecting right now. Please try again.", 'ai');
                 } finally {
-                    sendBtn.disabled = false;
-                    userInput.focus();
+                    if (sendBtn) sendBtn.disabled = false;
+                    if (userInput) userInput.focus();
                 }
             },
             
@@ -185,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const data = await response.json();
                 
-                // 添加到历史记录
+                // Add to history
                 this.chatHistory.push({ 
                     role: 'user', 
                     content: message 
@@ -206,8 +205,10 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
     
-    // 发送消息
+    // Send message
     function sendMessage() {
+        if (!userInput || !aiChat) return;
+        
         const message = userInput.value.trim();
         if (!message) return;
         
@@ -216,112 +217,160 @@ document.addEventListener('DOMContentLoaded', () => {
         if (aiChat && currentExperiment) {
             aiChat.sendMessage(message);
         } else {
-            // 如果不在实验详情中，显示提示
-            const tempMsg = document.createElement('div');
-            tempMsg.className = 'message ai';
-            tempMsg.innerHTML = '<p>Please select an experiment first to start asking questions.</p>';
-            chatMessages.appendChild(tempMsg);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            // If not in experiment detail, show prompt
+            if (chatMessages) {
+                const tempMsg = document.createElement('div');
+                tempMsg.className = 'message ai';
+                tempMsg.innerHTML = '<p>Please select an experiment first to start asking questions.</p>';
+                chatMessages.appendChild(tempMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
         }
     }
     
-    // 显示欢迎消息
-    function showWelcomeMessage() {
-        aiMessage.textContent = "Welcome to the Life Science Laboratory. Let me show you the beauty of life sciences!";
+    // Show welcome message
+    async function showWelcomeMessage() {
+        try {
+            // Try to get AI-generated welcome message
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    type: 'welcome'
+                })
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    aiMessage.textContent = data.content;
+                } else {
+                    aiMessage.textContent = "Welcome to the Life Science Laboratory! I'm Dr. Qian Xuesen, and I'm excited to show you the wonders of life sciences. Let's explore together!";
+                }
+            } else {
+                throw new Error('Failed to fetch welcome message');
+            }
+        } catch (error) {
+            console.error('Error loading welcome message:', error);
+            // Fallback welcome message
+            aiMessage.textContent = "Welcome to the Life Science Laboratory! I'm Dr. Qian Xuesen, and I'm excited to show you the wonders of life sciences. Let's explore together!";
+        }
         
-        // 添加一些微妙的动画
+        // Add subtle animation
         setTimeout(() => {
-            aiBubble.style.animation = 'none';
-            setTimeout(() => {
-                aiBubble.style.animation = 'bubbleAppear 0.5s';
-            }, 10);
+            if (aiBubble) {
+                aiBubble.style.animation = 'none';
+                setTimeout(() => {
+                    aiBubble.style.animation = 'bubbleAppear 0.5s';
+                }, 10);
+            }
         }, 500);
+        
+        // Hide loading overlay
+        if (loadingOverlay) {
+            loadingOverlay.style.opacity = '0';
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+            }, 500);
+        }
     }
     
-    // 显示实验面板
+    // Show experiments panel (CENTERED)
     function showExperimentsPanel() {
         currentState = 'experiments';
-        experimentsPanel.style.display = 'block';
+        if (experimentsPanel) {
+            experimentsPanel.style.display = 'flex';
+            
+            // Animation effect
+            experimentsPanel.style.opacity = '0';
+            setTimeout(() => {
+                experimentsPanel.style.transition = 'all 0.5s ease';
+                experimentsPanel.style.opacity = '1';
+            }, 10);
+        }
         
-        // 动画效果
-        experimentsPanel.style.opacity = '0';
-        experimentsPanel.style.transform = 'translateY(20px)';
-        
+        // AI prompt
         setTimeout(() => {
-            experimentsPanel.style.transition = 'all 0.5s ease';
-            experimentsPanel.style.opacity = '1';
-            experimentsPanel.style.transform = 'translateY(0)';
-        }, 10);
-        
-        // 触发AI提示
-        setTimeout(() => {
-            aiMessage.textContent = "Please choose one of the three life science experiments below. Each represents a milestone discovery!";
+            if (aiMessage) {
+                aiMessage.textContent = "Please choose one of the three life science experiments below. Each represents a milestone discovery!";
+            }
         }, 500);
     }
     
-    // 显示主界面
+    // Show main interface
     function showMainInterface() {
         currentState = 'main';
         
-        // 动画效果
-        experimentsPanel.style.transition = 'all 0.5s ease';
-        experimentsPanel.style.opacity = '0';
-        experimentsPanel.style.transform = 'translateY(20px)';
+        if (experimentsPanel) {
+            // Animation effect
+            experimentsPanel.style.transition = 'all 0.5s ease';
+            experimentsPanel.style.opacity = '0';
+            
+            setTimeout(() => {
+                experimentsPanel.style.display = 'none';
+                experimentsPanel.style.opacity = '1';
+            }, 500);
+        }
         
+        // AI back to welcome state
         setTimeout(() => {
-            experimentsPanel.style.display = 'none';
-            experimentsPanel.style.opacity = '1';
-            experimentsPanel.style.transform = 'translateY(0)';
-        }, 500);
-        
-        // AI回到欢迎状态
-        setTimeout(() => {
-            aiMessage.textContent = "Welcome back! Click the flask to explore more experiments.";
+            if (aiMessage) {
+                aiMessage.textContent = "Welcome back! Click the flask to explore more experiments.";
+            }
         }, 300);
     }
     
-    // 显示实验详情
+    // Show experiment detail
     function showExperimentDetail(experiment) {
         currentState = 'detail';
         currentExperiment = experiment;
         
-        experimentsPanel.style.display = 'none';
-        experimentDetail.style.display = 'flex';
+        if (experimentsPanel) {
+            experimentsPanel.style.display = 'none';
+        }
         
-        // 设置实验标题
+        if (experimentDetail) {
+            experimentDetail.style.display = 'flex';
+        }
+        
+        // Set experiment title
         const expData = experimentTitles[experiment];
-        if (expData) {
+        if (expData && expTitle) {
             expTitle.innerHTML = `
                 ${expData.icon} ${expData.title} 
                 <span class="year">(${expData.year})</span>
             `;
             
-            // 更新主题颜色
+            // Update theme color
             updateExperimentTheme(expData.color);
-        } else {
+        } else if (expTitle) {
             expTitle.textContent = 'Life Science Experiment';
         }
         
-        // 设置当前实验
+        // Set current experiment
         if (aiChat) {
             aiChat.setExperiment(experiment);
         }
         
-        // 加载实验介绍
+        // Load experiment introduction
         loadExperimentIntroduction(experiment);
         
-        // 清空聊天记录
-        chatMessages.innerHTML = '';
+        // Clear chat history
+        if (chatMessages) {
+            chatMessages.innerHTML = '';
+        }
         
-        // 添加欢迎消息
+        // Add welcome message
         setTimeout(() => {
-            if (aiChat) {
-                aiChat.addMessage(`Welcome to the ${expData?.title || 'experiment'}! What would you like to know?`, 'ai');
+            if (aiChat && experimentTitles[experiment]) {
+                aiChat.addMessage(`Welcome to the ${experimentTitles[experiment].title}! What would you like to know?`, 'ai');
             }
         }, 1000);
     }
     
-    // 更新实验主题颜色
+    // Update experiment theme color
     function updateExperimentTheme(color) {
         const chatInput = document.querySelector('.chat-input input');
         const sendBtn = document.querySelector('.chat-input button');
@@ -341,7 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // 加深颜色
+    // Darken color helper
     function darkenColor(color, percent) {
         const num = parseInt(color.replace('#', ''), 16);
         const amt = Math.round(2.55 * percent);
@@ -357,46 +406,54 @@ document.addEventListener('DOMContentLoaded', () => {
         ).toString(16).slice(1);
     }
     
-    // 关闭实验详情
+    // Close experiment detail
     function closeExperimentDetail() {
         currentState = 'experiments';
         
-        // 动画效果
-        experimentDetail.style.transition = 'all 0.5s ease';
-        experimentDetail.style.opacity = '0';
-        experimentDetail.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-            experimentDetail.style.display = 'none';
-            experimentDetail.style.opacity = '1';
-            experimentDetail.style.transform = 'translateY(0)';
-            
-            // 显示实验选择面板
-            experimentsPanel.style.display = 'block';
-            experimentsPanel.style.opacity = '0';
+        if (experimentDetail) {
+            // Animation effect
+            experimentDetail.style.transition = 'all 0.5s ease';
+            experimentDetail.style.opacity = '0';
+            experimentDetail.style.transform = 'translateY(20px)';
             
             setTimeout(() => {
-                experimentsPanel.style.transition = 'all 0.5s ease';
-                experimentsPanel.style.opacity = '1';
-            }, 10);
-        }, 500);
+                experimentDetail.style.display = 'none';
+                experimentDetail.style.opacity = '1';
+                experimentDetail.style.transform = 'translateY(0)';
+                
+                // Show experiments panel
+                if (experimentsPanel) {
+                    experimentsPanel.style.display = 'flex';
+                    experimentsPanel.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        experimentsPanel.style.transition = 'all 0.5s ease';
+                        experimentsPanel.style.opacity = '1';
+                    }, 10);
+                }
+            }, 500);
+        }
         
-        // 重置主题颜色
+        // Reset theme color
         resetTheme();
         
-        // 清空输入框
-        userInput.value = '';
+        // Clear input field
+        if (userInput) {
+            userInput.value = '';
+        }
         
-        // 重置实验状态
+        // Reset experiment state
         currentExperiment = null;
         
-        // AI提示
+        // AI prompt
         setTimeout(() => {
-            aiMessage.textContent = "Which experiment would you like to explore next?";
+            if (aiMessage) {
+                aiMessage.textContent = "Which experiment would you like to explore next?";
+            }
         }, 300);
     }
     
-    // 重置主题颜色
+    // Reset theme color
     function resetTheme() {
         const chatInput = document.querySelector('.chat-input input');
         const sendBtn = document.querySelector('.chat-input button');
@@ -410,8 +467,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // 加载实验介绍
+    // Load experiment introduction
     async function loadExperimentIntroduction(experiment) {
+        if (!expContent) return;
+        
         expContent.innerHTML = `
             <div class="experiment-loading">
                 <div class="loading-icon">${experimentTitles[experiment]?.icon || '🔬'}</div>
@@ -434,9 +493,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             });
             
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             const data = await response.json();
             
-            // 显示实验介绍
+            if (!data.success) {
+                throw new Error(`API error: ${data.error}`);
+            }
+            
+            // Show AI introduction
             expContent.innerHTML = `
                 <div class="experiment-header">
                     <h3>${experimentTitles[experiment]?.title || 'Experiment'} 
@@ -471,7 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error loading introduction:', error);
             
-            // 显示备用内容
+            // Show fallback content
             expContent.innerHTML = `
                 <div class="experiment-header">
                     <h3>${experimentTitles[experiment]?.title || 'Experiment'}</h3>
@@ -490,9 +557,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // 格式化AI响应
+    // Format AI response
     function formatAIResponse(text) {
-        // 将Markdown风格的换行转换为HTML段落
+        if (!text) return '';
+        
+        // Convert Markdown-style line breaks to HTML paragraphs
         const paragraphs = text.split('\n\n');
         return paragraphs.map(p => {
             if (p.trim()) {
@@ -502,7 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
     }
     
-    // 导出一些函数供实验交互使用
+    // Export function for microscope interaction
     window.adjustMicroscope = function(value) {
         const magLevel = document.getElementById('magLevel');
         const waterSample = document.getElementById('waterSample');
@@ -522,6 +591,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     
-    // 调试信息
+    // Debug info
     console.log('Life Science Laboratory initialized successfully');
 });
