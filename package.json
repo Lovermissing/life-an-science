@@ -1,18 +1,11 @@
 {
   "name": "ustc-lab-life-science",
   "version": "1.0.0",
-  "description": "USTC Life Science Laboratory with AI Assistant",
-  "main": "index.html",
-  "scripts": {
-    "start": "echo 'Static site'"
+  "type": "module",  // 添加这行
+  "engines": {
+    "node": "20.x"   // 改为固定版本
   },
   "dependencies": {
-    "openai": "^4.28.0"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "keywords": ["ustc", "life-science", "ai", "education"],
-  "author": "Your Name",
-  "license": "MIT"
+    "openai": "^4.77.0"
+  }
 }
