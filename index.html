@@ -85,7 +85,7 @@
         </div>
     </div>
     
-    <!-- Next Lab Button -->
+    <!-- Next Lab Button - 点击跳转到消防实验室 -->
     <div class="next-lab-btn" id="nextLabBtn">
         <span>Next Lab →</span>
     </div>
@@ -103,5 +103,13 @@
     </div>
     
     <script src="scripts/main.js"></script>
+    
+    <!-- 添加点击跳转脚本 -->
+    <script>
+        // 点击 "Next Lab" 按钮跳转到消防实验室
+        document.getElementById('nextLabBtn').addEventListener('click', function() {
+            window.location.href = 'https://flame-qoz4m8fqa-chi-s-projects11.vercel.app/';
+        });
+    </script>
 </body>
 </html>
