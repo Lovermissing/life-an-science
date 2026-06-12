@@ -1,11 +1,16 @@
 // api/chat.js - English-only Qian Xuesen AI
 import OpenAI from 'openai';
 
+// ✅ 1. 改为讯飞星火 MaaS 的 OpenAI 兼容地址
 const openai = new OpenAI({
-  baseURL: 'https://api.deepseek.com/v1',
-  apiKey: process.env.DEEPSEEK_API_KEY || ''
+  baseURL: 'https://maas-api.cn-huabei-1.xf-yun.com/v2',
+  apiKey: process.env.XFYUN_API_KEY || ''
 });
 
+// ✅ 2. 改为你在讯飞控制台看到的模型 ID
+const MODEL_NAME = 'xop35qwen2b';
+
+// ✅ 3. 下面所有内容【完全不动】
 // UPDATED: Enhanced English-only system prompt with welcome message
 const BASE_SYSTEM_PROMPT = `You are the young Qian Xuesen, age 28, an enthusiastic Assistant Professor of Life Sciences at USTC.
 
@@ -28,7 +33,6 @@ Language Guidelines:
 
 Role: You're guiding students through USTC's Life Science Laboratory.`;
 
-// UPDATED: Enhanced welcome message
 const WELCOME_MESSAGE = `Welcome to the Life Science Laboratory! I'm Dr. Qian Xuesen, and I'm delighted to welcome you to our exploration of life's mysteries. 
 
 As a researcher at USTC, I've always been fascinated by how living systems work - from the tiniest microorganisms to the complexity of DNA. Each discovery opens new doors to understanding life itself.
@@ -37,7 +41,6 @@ Today, I'll guide you through three groundbreaking experiments that changed biol
 
 What aspect of life science intrigues you the most?`;
 
-// English experiment prompts
 const EXPERIMENT_INTRO_PROMPTS = {
   leeuwenhoek: `Introduce Antonie van Leeuwenhoek's discovery of microorganisms (1676).
 
@@ -101,8 +104,9 @@ export default async function handler(req, res) {
     
     const { type, experiment, message, history = [] } = req.body;
     
-    if (!process.env.DEEPSEEK_API_KEY) {
-      console.error('DeepSeek API Key not configured');
+    // ✅ 4. 只检查讯飞的 Key
+    if (!process.env.XFYUN_API_KEY) {
+      console.error('XFYUN API Key not configured');
       throw new Error('API Key not configured');
     }
     
@@ -111,7 +115,6 @@ export default async function handler(req, res) {
     ];
     
     if (type === 'welcome') {
-      // Return the pre-defined welcome message
       res.status(200).json({
         success: true,
         content: WELCOME_MESSAGE,
@@ -141,8 +144,9 @@ export default async function handler(req, res) {
       });
     }
     
+    // ✅ 5. 调用讯飞星火（模型名用常量）
     const completion = await openai.chat.completions.create({
-      model: 'deepseek-chat',
+      model: MODEL_NAME,
       messages: messages,
       max_tokens: 800,
       temperature: 0.8,
@@ -153,7 +157,7 @@ export default async function handler(req, res) {
     const aiResponse = completion.choices[0].message.content;
     const tokensUsed = completion.usage?.total_tokens || 0;
     
-    console.log(`DeepSeek response received. Tokens used: ${tokensUsed}`);
+    console.log(`XFYUN response received. Tokens used: ${tokensUsed}`);
     
     res.status(200).json({
       success: true,
